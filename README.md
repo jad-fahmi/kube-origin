@@ -18,7 +18,14 @@ Inputs, in precedence order:
 
 ## Install
 
-With Go 1.26 or newer:
+Download the matching binary for your operating system and architecture from
+[GitHub Releases](https://github.com/jad-fahmi/kube-origin/releases). Rename it
+to `kube-origin` (or `kube-origin.exe` on Windows) and place it on your `PATH`.
+Release assets include Linux, macOS, and Windows builds for amd64 and arm64,
+plus a `checksums.txt` file. On Linux and macOS, make the downloaded file
+executable with `chmod +x kube-origin` before running it.
+
+Or install from source with Go 1.26 or newer:
 
 ```sh
 go install github.com/jad-fahmi/kube-origin/cmd/kube-origin@latest
@@ -33,6 +40,7 @@ go build -o kube-origin ./cmd/kube-origin
 ## Usage
 
 ```sh
+kube-origin --version
 kube-origin                         # explain current-context
 kube-origin --context staging      # explain a named context
 kube-origin --kubeconfig ./team.yaml
@@ -65,6 +73,12 @@ go vet ./...
 ```
 
 The project uses Go modules and the official `k8s.io/client-go` loading implementation.
+
+## Releasing
+
+Push a version tag such as `v0.1.0` to build Linux, macOS, and Windows binaries
+for amd64 and arm64. The workflow publishes them with a SHA-256 `checksums.txt`
+file on the matching GitHub Release.
 
 ## License
 

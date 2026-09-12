@@ -10,6 +10,8 @@ import (
 	"github.com/jad-fahmi/kube-origin/internal/origin"
 )
 
+var version = "dev"
+
 func main() {
 	if err := run(os.Args[1:], os.Stdout, os.Stderr); err != nil {
 		fmt.Fprintln(os.Stderr, "kube-origin:", err)
@@ -23,6 +25,7 @@ func run(args []string, stdout, stderr io.Writer) error {
 	contextName := flags.String("context", "", "context to explain (defaults to current-context)")
 	kubeconfig := flags.String("kubeconfig", "", "path to a kubeconfig file (defaults to KUBECONFIG or ~/.kube/config)")
 	jsonOutput := flags.Bool("json", false, "write machine-readable JSON")
+	showVersion := flags.Bool("version", false, "print the version and exit")
 	if err := flags.Parse(args); errors.Is(err, flag.ErrHelp) {
 		return nil
 	} else if err != nil {
@@ -30,6 +33,10 @@ func run(args []string, stdout, stderr io.Writer) error {
 	}
 	if flags.NArg() != 0 {
 		return errors.New("unexpected positional arguments; see --help")
+	}
+	if *showVersion {
+		_, err := fmt.Fprintf(stdout, "kube-origin %s\n", version)
+		return err
 	}
 
 	report, err := origin.Inspect(origin.Options{
